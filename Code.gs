@@ -12,7 +12,7 @@ var SIDEBAR_TITLE = 'Resize Charts';
 function onOpen(e) {
   SpreadsheetApp.getUi()
       .createAddonMenu()
-      .addItem('Resize Charts', 'showSidebar')
+      .addItem('Show Sidebar', 'showSidebar')
       .addToUi();
 }
 

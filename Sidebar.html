@@ -9,28 +9,33 @@
     <!-- Below is the HTML code that defines the sidebar element structure. -->
     <div class="sidebar branding-below">
       <p>
-        This addon allows you to resize, with precision, the charts in the
-        current sheet.
+        This add-on allows you to resize, with precision, the charts in the
+        current sheet. Type the desired width and height in pixels and press
+        "Resize All"
       </p>
-      <div class="block form-group" id="sidebar-width-block">
-        <label for="sidebar-width">Width</label>
-        <input id="sidebar-width" style="width: 40px;">
+      <div role="form" id="resize-charts-form" aria-label="Resize charts form"></div>
+        <div class="block form-group" id="sidebar-width-block">
+          <label for="sidebar-width">Width</label>
+          <input id="sidebar-width" type="number" min="1" max="3000" style="width: 4em;">
+        </div>
+        <div class="block form-group" id="sidebar-height-block">
+          <label for="sidebar-height">Height</label>
+          <input id="sidebar-height" type="number" min="1" max="3000" style="width: 4em;">
+        </div>
+        <div class="block" id="sidebar-button-all">
+          <button id="sidebar-all-button" class="action">Resize All</button>
+        </div>
+        <div id="sidebar-status"></div>
       </div>
-      <div class="block form-group" id="sidebar-height-block">
-        <label for="sidebar-height">Height</label>
-        <input id="sidebar-height" style="width: 40px;">
-      </div>
-      <div class="block" id="sidebar-button-all">
-        <button id="sidebar-all-button" class="action">Resize All</button>
-      </div>
-      <div id="sidebar-status"></div>
     </div>
 
     <!-- Enter sidebar bottom-branding below. -->
     <div class="sidebar bottom">
       <img alt="Add-on logo" class="logo" width="25"
           src="https://www.gstatic.com/images/branding/product/2x/apps_script_64dp.png">
-      <span class="gray branding-text">Resize Charts Add-on by Leonel Galan</span>
+      <span class="gray branding-text">
+        <a href="https://github.com/leonelgalan/resize_charts" target="_blank">Resize Charts</a> it's an Open Source Add-on by Leonel Galan
+      </span>
     </div>
 
     <!-- Use a templated HTML printing scriptlet to import JavaScript. -->

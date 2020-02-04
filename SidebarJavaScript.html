@@ -19,8 +19,14 @@
   function onAllClick() {
     this.disabled = true;
 
-    var width = $('#sidebar-width').val();
-    var height = $('#sidebar-height').val();
+    var width = Number($('#sidebar-width').val());
+    var height = Number($('#sidebar-height').val());
+
+    if (width === 0 || height === 0) {
+      showStatus('Both Width and Height are required', 'error');
+      this.disabled = false;
+      return;
+    }
 
     // Gather any information that needs to be sent to the server here.
 
@@ -29,7 +35,7 @@
         .withSuccessHandler(
           function(msg, element) {
             // Respond to success conditions here.
-            showStatus('Charts resized successfully to ' + width + 'x' + height);
+            showStatus('Charts resized successfully to ' + width + 'x' + height, 'success');
             element.disabled = false;
           })
         .withFailureHandler(
@@ -39,7 +45,7 @@
             element.disabled = false;
           })
         .withUserObject(this)
-        .resizeAllCharts(width, height);
+        .resizeAllCharts(Number(width), Number(height));
   }
 
   /**
