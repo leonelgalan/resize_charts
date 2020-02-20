@@ -1,15 +1,121 @@
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
+  var units, width, height, resolution;
+  var $units, $width, $height, $resolution, $custom, $customContainer;
+
   /**
    * Run initializations on sidebar load.
    */
   $(function() {
-    // Assign handler functions to sidebar elements here, if needed.
     $('#sidebar-all-button').click(onAllClick);
 
-    // Call the server here to retrieve any information needed to build
-    // the dialog, if necessary.
+    $units = $('#sidebar-units');
+    $units.change(onUnitsChange);
+    units = $units.val();
+
+    $width = $('#sidebar-width');
+    $width.change(onWidthChange);
+    width = Number($width.val());
+
+    $height = $('#sidebar-height');
+    $height.change(onHeightChange);
+    height = Number($height.val());
+
+    $resolution = $('#sidebar-resolution');
+    $resolution.change(onResolutionChange);
+    resolution = Number($resolution.val());
+
+    $customContainer = $('#sidebar-custom-block');
+    $custom = $('#sidebar-custom');
+    $custom.change(onResolutionChange);
+    
+    updateResultingSize();
   });
+
+  /**
+   * Handle units change
+   */
+  function onUnitsChange() {
+    units = this.value;
+
+    if (units === 'pixels') {
+      width = (width * resolution).toFixed(0);
+      $width.val(width);
+      height = (height * resolution).toFixed(0);
+      $height.val(height);
+    } else if (units === 'inches') {
+      width = width / resolution;
+      height = height / resolution;
+      $width.val(width.toFixed(2));
+      $height.val(height.toFixed(2));
+    }
+    updateResultingSize();
+  }
+
+  /**
+   * Handle width change
+   */
+  function onWidthChange() {
+    width = Number(this.value);
+    updateResultingSize();
+  }
+
+  /**
+   * Handle height change
+   */
+  function onHeightChange() {
+    height = Number(this.value);
+    updateResultingSize();
+  }
+
+  /**
+   * Handle resolution change, show custom input when "Custom" is selected.
+   * Hide it when a preset resolution is set.
+   */
+  function onResolutionChange() {
+    var newResolution = this.value;
+    if (newResolution === 'custom') {
+      $customContainer.show();
+      $custom.val(resolution);
+      return;
+    }
+
+    if ($.inArray(Number(newResolution), [72, 144, 300]) !== -1) {
+      $resolution.val(newResolution);
+      $customContainer.hide();
+    }
+
+    var oldResolution = resolution;
+    resolution = Number(newResolution);
+
+    if (units === 'pixels' && resolution !== 0) {
+      width = ((width / oldResolution) * resolution).toFixed(0);
+      $width.val(width);
+      height = ((height / oldResolution) * resolution).toFixed(0);
+      $height.val(height);
+     }
+
+     updateResultingSize();
+    }
+
+  /**
+   * Handle resolution change, show custom input when "Custom" is selected.
+   * Hide it when a preset resolution is set.
+   */
+  function updateResultingSize() {
+    var widthInches, heightInches;
+
+    if (units === 'pixels') {
+      widthInches = units === 'pixels' ? width / resolution : width;
+      heightInches = units === 'pixels' ? height / resolution : height;
+    } else if (units === 'inches') {
+      widthInches = width;
+      heightInches = height;
+    }
+
+    $('#sidebar-width-inches').html(widthInches.toFixed(2));
+    $('#sidebar-height-inches').html(heightInches.toFixed(2));
+  }
 
   /**
    * Calls the server to retrieve information from the sheet.
@@ -19,23 +125,23 @@
   function onAllClick() {
     this.disabled = true;
 
-    var width = Number($('#sidebar-width').val());
-    var height = Number($('#sidebar-height').val());
-
-    if (width === 0 || height === 0) {
-      showStatus('Both Width and Height are required', 'error');
+    if (width === 0 || height === 0 || resolution === 0) {
+      showStatus('All Width, Height, and Resolution are required', 'error');
       this.disabled = false;
       return;
     }
-
-    // Gather any information that needs to be sent to the server here.
+    
+    var multiplier = 1;
+    if (units === 'inches') {
+      multiplier = resolution;
+    }
 
     // Send the value to the server and handle the response.
     google.script.run
         .withSuccessHandler(
           function(msg, element) {
             // Respond to success conditions here.
-            showStatus('Charts resized successfully to ' + width + 'x' + height, 'success');
+            showStatus('Charts resized successfully to ' + width + ' by ' + height + ' ' + units, 'success');
             element.disabled = false;
           })
         .withFailureHandler(
@@ -45,7 +151,7 @@
             element.disabled = false;
           })
         .withUserObject(this)
-        .resizeAllCharts(Number(width), Number(height));
+        .resizeAllCharts(width * multiplier, height * multiplier);
   }
 
   /**

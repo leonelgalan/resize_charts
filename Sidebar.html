@@ -10,17 +10,40 @@
     <div class="sidebar branding-below">
       <p>
         This add-on allows you to resize, with precision, the charts in the
-        current sheet. Type the desired width and height in pixels and press
-        "Resize All"
+        active sheet. Type the desired width and height in inches or pixels,
+        select a resolution and press "Resize All"
       </p>
       <div role="form" id="resize-charts-form" aria-label="Resize charts form"></div>
+        <div class="block form-group" id="sidebar-units-block">
+          <label for="sidebar-units">Units</label>
+          <select id="sidebar-units">
+            <option selected>inches</option>
+            <option>pixels</option>
+          </select>
+        </div>
         <div class="block form-group" id="sidebar-width-block">
           <label for="sidebar-width">Width</label>
-          <input id="sidebar-width" type="number" min="1" max="3000" style="width: 4em;" value="500">
+          <input id="sidebar-width" type="number" min="1" max="3000" style="width: 5.5em;" value="6.00">
         </div>
         <div class="block form-group" id="sidebar-height-block">
           <label for="sidebar-height">Height</label>
-          <input id="sidebar-height" type="number" min="1" max="3000" style="width: 4em;" value="400">
+          <input id="sidebar-height" type="number" min="1" max="3000" style="width: 5.5em;" value="4.10">
+        </div>
+        <div class="block form-group" id="sidebar-resolution-block">
+          <label for="sidebar-resolution">Resolution (pixels/inch)</label>
+          <select id="sidebar-resolution">
+            <option value="72" selected>72 - Web</option>
+            <option value="144">144 - Web @2x</option>
+            <option value="300">300 - Print</option>
+            <option value="custom">Custom</option>
+          </select>
+        </div>
+        <div class="block form-group" id="sidebar-custom-block" style="display: none;">
+          <label for="sidebar-custom">Custom Resolution (pixels/inch)</label>
+          <input id="sidebar-custom" type="number" min="1" max="3000" style="width: 5.5em;" value="96">
+        </div>
+        <div>
+          <p><span class="secondary">Resulting Size: <span id="sidebar-width-inches">0.00</span> x <span id="sidebar-height-inches">0.00</span> inches</span></p>
         </div>
         <div class="block" id="sidebar-button-all">
           <button id="sidebar-all-button" class="action">Resize All</button>
@@ -31,10 +54,10 @@
 
     <!-- Enter sidebar bottom-branding below. -->
     <div class="sidebar bottom">
-      <img alt="Add-on logo" class="logo" width="25"
+      <img alt="Add-on logo" class="logo" width="15"
           src="https://raw.githubusercontent.com/leonelgalan/resize_charts/master/logo-tight.png">
       <span class="gray branding-text">
-        <a href="https://github.com/leonelgalan/resize_charts" target="_blank">Resize Charts</a> it's an Open Source Add-on by Leonel Galan
+        Resize Charts is an <a href="https://github.com/leonelgalan/resize_charts" target="_blank">Open Source Add-on</a>
       </span>
     </div>
 
