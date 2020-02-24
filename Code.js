@@ -10,6 +10,7 @@ var SIDEBAR_TITLE = 'Resize Charts';
  * @param {Object} e The event parameter for a simple onOpen trigger.
  */
 function onOpen(e) {
+  console.info('onOpen', 'e.authMode', e && e.authMode)
   SpreadsheetApp.getUi()
       .createAddonMenu()
       .addItem('Show Sidebar', 'showSidebar')
@@ -23,6 +24,7 @@ function onOpen(e) {
  * @param {Object} e The event parameter for a simple onInstall trigger.
  */
 function onInstall(e) {
+  console.info('onInstall', 'e.authMode', e && e.authMode)
   onOpen(e);
 }
 
